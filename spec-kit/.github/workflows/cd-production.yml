@@ -1,0 +1,79 @@
+name: CD Pipeline - Production
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - uses: actions/checkout@v3
+
+    # Backend deployment
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install backend dependencies
+      run: |
+        cd backend
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install gunicorn
+
+    - name: Run backend tests
+      run: |
+        cd backend
+        python -m pytest tests/ -v --cov=src --cov-fail-under=80
+
+    - name: Build backend Docker image
+      run: |
+        cd backend
+        echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/textbook-backend:production .
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/textbook-backend:production
+
+    # Frontend deployment
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install frontend dependencies
+      run: |
+        cd frontend
+        npm ci
+
+    - name: Run frontend tests
+      run: |
+        cd frontend
+        npm test -- --watchAll=false --coverage --coverageThreshold='{"global":{"branches":80,"functions":80,"lines":80,"statements":80}}'
+
+    - name: Build frontend
+      run: |
+        cd frontend
+        REACT_APP_API_BASE_URL=${{ secrets.REACT_APP_API_BASE_URL }} npm run build
+
+    - name: Deploy frontend to production
+      run: |
+        # This would be specific to your hosting solution (e.g., AWS S3, Vercel, Netlify)
+        echo "Deploying frontend to production environment"
+        # Add actual deployment commands here based on your hosting provider
+
+    # Deployment to production environment
+    - name: Deploy to production
+      run: |
+        echo "Deploying to production environment"
+        # Add deployment commands specific to your infrastructure (e.g., kubectl, AWS, etc.)
+
+    # Post-deployment notification
+    - name: Notify deployment
+      run: |
+        echo "Production deployment completed successfully"
+        # Add notification commands (e.g., Slack, email) here

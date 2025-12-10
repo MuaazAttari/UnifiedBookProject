@@ -1,0 +1,145 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #2e8555;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Custom styles for book reading experience */
+.book-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.book-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.book-chapter {
+  margin-bottom: 3rem;
+}
+
+.chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.chapter-nav a {
+  text-decoration: none;
+}
+
+.chapter-nav .next {
+  margin-left: auto;
+}
+
+.chapter-nav .prev {
+  margin-right: auto;
+}
+
+/* Improve readability for long-form content */
+.markdown {
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.markdown p {
+  margin-bottom: 1rem;
+}
+
+.markdown blockquote {
+  border-left: 4px solid var(--ifm-color-primary);
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+}
+
+/* Table of contents styling */
+.table-of-contents {
+  padding: 0.5rem 0;
+}
+
+.table-of-contents li {
+  margin-bottom: 0.25rem;
+}
+
+/* Code block improvements */
+.prism-code {
+  font-size: 0.9rem;
+}
+
+/* Improve image display in content */
+.markdown img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1rem auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Custom callout boxes for important information */
+.admonition {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.admonition.note {
+  border-left: 4px solid #4285f4;
+  background-color: rgba(66, 133, 244, 0.1);
+}
+
+.admonition.tip {
+  border-left: 4px solid #0f9d58;
+  background-color: rgba(15, 157, 88, 0.1);
+}
+
+.admonition.warning {
+  border-left: 4px solid #f4b400;
+  background-color: rgba(244, 180, 0, 0.1);
+}
+
+.admonition.caution {
+  border-left: 4px solid #db4437;
+  background-color: rgba(219, 68, 55, 0.1);
+}

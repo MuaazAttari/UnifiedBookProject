@@ -1,0 +1,73 @@
+name: CD Pipeline - Staging
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+    - uses: actions/checkout@v3
+
+    # Backend deployment
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install backend dependencies
+      run: |
+        cd backend
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install gunicorn
+
+    - name: Run backend tests
+      run: |
+        cd backend
+        python -m pytest tests/ -v
+
+    - name: Build backend Docker image
+      run: |
+        cd backend
+        echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/textbook-backend:staging .
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/textbook-backend:staging
+
+    # Frontend deployment
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install frontend dependencies
+      run: |
+        cd frontend
+        npm ci
+
+    - name: Run frontend tests
+      run: |
+        cd frontend
+        npm test -- --watchAll=false
+
+    - name: Build frontend
+      run: |
+        cd frontend
+        npm run build
+
+    - name: Deploy frontend to staging
+      run: |
+        # This would be specific to your hosting solution (e.g., AWS S3, Vercel, Netlify)
+        echo "Deploying frontend to staging environment"
+        # Add actual deployment commands here based on your hosting provider
+
+    # Deployment to staging environment
+    - name: Deploy to staging
+      run: |
+        echo "Deploying to staging environment"
+        # Add deployment commands specific to your infrastructure (e.g., kubectl, AWS, etc.)

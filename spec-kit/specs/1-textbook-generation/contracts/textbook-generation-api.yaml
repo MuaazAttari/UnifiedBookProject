@@ -1,0 +1,231 @@
+# OpenAPI Contract: Textbook Generation API
+
+## Base URL
+`https://api.textbook-generator.com/v1`
+
+## Authentication
+All API endpoints require a valid API key in the header:
+```
+Authorization: Bearer {api_key}
+```
+
+## Endpoints
+
+### Generate Textbook
+`POST /textbook/generate`
+
+#### Description
+Initiates the generation of a new textbook based on the provided parameters.
+
+#### Request Body
+```json
+{
+  "subject": "Introduction to Computer Science",
+  "title": "CS101 Textbook",
+  "educational_level": "UNDERGRADUATE",
+  "settings": {
+    "include_exercises": true,
+    "include_summaries": true,
+    "output_format": "PDF",
+    "custom_style": "academic",
+    "chapters_count": 10
+  }
+}
+```
+
+#### Response (202 Accepted)
+```json
+{
+  "id": "textbook-uuid-123",
+  "status": "GENERATING",
+  "created_at": "2025-12-09T10:30:00Z",
+  "estimated_completion": "2025-12-09T10:35:00Z"
+}
+```
+
+### Get Textbook Status
+`GET /textbook/{id}`
+
+#### Description
+Retrieves the current status and details of a textbook generation process.
+
+#### Response (200 OK)
+```json
+{
+  "id": "textbook-uuid-123",
+  "title": "CS101 Textbook",
+  "subject": "Introduction to Computer Science",
+  "educational_level": "UNDERGRADUATE",
+  "status": "COMPLETED",
+  "created_at": "2025-12-09T10:30:00Z",
+  "updated_at": "2025-12-09T10:34:00Z",
+  "chapters_count": 10,
+  "settings": {
+    "include_exercises": true,
+    "include_summaries": true,
+    "output_format": "PDF"
+  },
+  "chapters": [
+    {
+      "id": "chapter-uuid-456",
+      "title": "Introduction to Programming",
+      "position": 1,
+      "status": "REVIEWED"
+    }
+  ]
+}
+```
+
+### Update Chapter Content
+`PUT /chapter/{id}`
+
+#### Description
+Updates the content of a specific chapter after review.
+
+#### Request Body
+```json
+{
+  "title": "Introduction to Programming",
+  "content": "Updated chapter content after review...",
+  "status": "REVIEWED"
+}
+```
+
+#### Response (200 OK)
+```json
+{
+  "id": "chapter-uuid-456",
+  "title": "Introduction to Programming",
+  "content": "Updated chapter content after review...",
+  "status": "REVIEWED",
+  "position": 1,
+  "updated_at": "2025-12-09T11:00:00Z"
+}
+```
+
+### Export Textbook
+`POST /textbook/{id}/export`
+
+#### Description
+Exports the completed textbook in the specified format.
+
+#### Request Body
+```json
+{
+  "format": "PDF",
+  "include_solutions": false
+}
+```
+
+#### Response (200 OK)
+```json
+{
+  "download_url": "https://api.textbook-generator.com/v1/download/textbook-uuid-123.pdf",
+  "expires_at": "2025-12-10T10:30:00Z"
+}
+```
+
+### Get User Preferences
+`GET /user/preferences`
+
+#### Description
+Retrieves the current user's preferences for textbook generation.
+
+#### Response (200 OK)
+```json
+{
+  "default_educational_level": "UNDERGRADUATE",
+  "default_format": "PDF",
+  "default_style": "academic",
+  "include_exercises_by_default": true,
+  "include_summaries_by_default": true
+}
+```
+
+### Update User Preferences
+`PUT /user/preferences`
+
+#### Description
+Updates the current user's preferences for textbook generation.
+
+#### Request Body
+```json
+{
+  "default_educational_level": "K12",
+  "default_format": "DOCX",
+  "default_style": "casual",
+  "include_exercises_by_default": false
+}
+```
+
+#### Response (200 OK)
+```json
+{
+  "default_educational_level": "K12",
+  "default_format": "DOCX",
+  "default_style": "casual",
+  "include_exercises_by_default": false,
+  "updated_at": "2025-12-09T11:15:00Z"
+}
+```
+
+## Error Responses
+
+### 400 Bad Request
+```json
+{
+  "error": "VALIDATION_ERROR",
+  "message": "Invalid input parameters",
+  "details": {
+    "subject": "Subject is required and must be between 3 and 100 characters"
+  }
+}
+```
+
+### 401 Unauthorized
+```json
+{
+  "error": "UNAUTHORIZED",
+  "message": "Invalid or missing API key"
+}
+```
+
+### 404 Not Found
+```json
+{
+  "error": "NOT_FOUND",
+  "message": "The requested resource was not found"
+}
+```
+
+### 500 Internal Server Error
+```json
+{
+  "error": "INTERNAL_ERROR",
+  "message": "An unexpected error occurred"
+}
+```
+
+## Common Headers
+- `Content-Type: application/json`
+- `Accept: application/json`
+- `Authorization: Bearer {api_key}`
+
+## Data Types
+
+### Educational Level (enum)
+- K12
+- UNDERGRADUATE
+- GRADUATE
+
+### Textbook Status (enum)
+- DRAFT
+- GENERATING
+- COMPLETED
+- REVIEWED
+
+### Chapter Status (enum)
+- DRAFT
+- GENERATING
+- COMPLETED
+- REVIEWED

@@ -1,0 +1,35 @@
+---
+title: Sample Page with Chatbot
+description: A sample page demonstrating the chatbot integration
+---
+
+# Sample Page with Chatbot
+
+This is a sample page demonstrating how the chatbot can be integrated into Docusaurus pages.
+
+import ChatInterface from '@site/src/components/Chatbot';
+
+## Interactive Textbook Assistant
+
+You can ask questions about this content using the real-time chatbot below:
+
+<ChatInterface contextType="full_book" chapterTitle="Sample Chapter" />
+
+## Selected Text Context
+
+If you have selected text on a page, the chatbot will automatically detect it and switch to selected text context mode. You can also pass specific text like this:
+
+<ChatInterface
+  contextType="selected_text"
+  selectedText="This is an example of selected text that would be passed to the chatbot for context-aware responses."
+  chapterTitle="Sample Chapter"
+/>
+
+## How It Works
+
+The chatbot component allows users to ask questions about the textbook content. It supports two context modes:
+
+- **Full Book**: Answers questions based on the entire textbook content
+- **Selected Text**: Answers questions based on specific selected text
+
+The component handles API communication with the backend RAG service and displays responses with source information.

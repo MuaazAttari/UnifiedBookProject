@@ -1,0 +1,92 @@
+---
+title: Chatbot Integration Guide
+description: How to integrate the textbook chatbot into Docusaurus pages
+---
+
+# Chatbot Integration Guide
+
+This guide explains how to integrate the textbook chatbot into Docusaurus pages for interactive learning experiences.
+
+## Basic Integration
+
+To add the chatbot to any MDX page, simply import and include the component:
+
+```mdx
+import ChatInterface from '@site/src/components/Chatbot';
+
+<ChatInterface contextType="full_book" chapterTitle="Your Chapter Title" />
+```
+
+## Context Modes
+
+The chatbot supports two context modes:
+
+### Full Book Context
+```mdx
+<ChatInterface contextType="full_book" chapterTitle="Introduction to AI" />
+```
+
+In this mode, the chatbot answers questions based on the entire textbook content.
+
+### Selected Text Context
+```mdx
+<ChatInterface
+  contextType="selected_text"
+  selectedText="The specific text that was selected by the user"
+  chapterTitle="Introduction to AI"
+/>
+```
+
+In this mode, the chatbot answers questions based on specific selected text.
+
+## Smart Chat Interface
+
+For automatic text selection detection, use the smart interface:
+
+```mdx
+import ChatInterface from '@site/src/components/Chatbot';
+
+<ChatInterface contextType="full_book" chapterTitle="Introduction to AI" />
+```
+
+This component automatically detects when text is selected on the page and switches to selected text context mode.
+
+## Features
+
+- **Context Awareness**: Switches between full book and selected text contexts
+- **Source Attribution**: Shows sources for answers
+- **Confidence Scoring**: Displays confidence level for responses
+- **Responsive Design**: Works on all device sizes
+- **Real-time Interaction**: Fast response times
+
+## Usage Tips
+
+1. Always provide a relevant `chapterTitle` for better context
+2. Use `contextType="full_book"` as the default for general questions
+3. The smart interface will automatically switch to selected text mode when text is highlighted
+4. Press `Escape` to clear the current selection
+
+## Example Implementation
+
+Here's a complete example of a page with integrated chatbot:
+
+```mdx
+---
+title: Chapter 1 - Introduction
+---
+
+# Chapter 1 - Introduction to Physical AI
+
+This chapter introduces the fundamental concepts of Physical AI...
+
+import ChatInterface from '@site/src/components/Chatbot';
+
+## Ask Questions
+
+<ChatInterface
+  contextType="full_book"
+  chapterTitle="Chapter 1 - Introduction to Physical AI"
+/>
+```
+
+The chatbot will appear below the content and allow users to ask questions about the material.

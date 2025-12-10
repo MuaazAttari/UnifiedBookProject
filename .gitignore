@@ -1,0 +1,39 @@
+# Dependencies and build artifacts
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+venv/
+env/
+dist/
+build/
+*.egg-info/
+.nyc_output/
+coverage/
+.nyc_output/
+
+# Docusaurus
+.docusaurus/
+.cache/
+.temp/
+.server/
+.sass-cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git subdirectories to avoid nested repo issues
+my-website/.git/
+spec-kit/.git/
+**/.git/
