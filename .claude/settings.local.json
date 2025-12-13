@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find . -name \"*.py\" -type f -exec grep -l -i \"translate\\|urdu\\|google.*translate\" {} ;)",
+      "Bash(mkdir -p spec-kit/backend/src/rag_chat)",
+      "Bash(dir \"my-website\\src\\components\\RAGChat\")",
+      "Bash(python test_rag_implementation.py)",
+      "Bash(ping -n 10 127.0.0.)",
+      "Bash(findstr :8000)",
+      "Bash(dir /s /b C:UsersAdminDesktopUnifiedBookProjectspec-kittasks*.output)",
+      "Bash(powershell \"Get-ChildItem -Path ''C:\\Users\\Admin\\Desktop\\UnifiedBookProject\\spec-kit\\tasks'' -Recurse -Name *.output\")",
+      "Bash(taskkill /im python.exe /f)"
+    ]
+  }
+}

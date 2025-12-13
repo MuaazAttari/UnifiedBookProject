@@ -68,7 +68,34 @@ npm install
 
 ## Deployment Methods
 
-### Method 1: Docker Compose (Recommended for Production)
+### Method 1: Railway Deployment (Recommended for Production)
+
+#### 1. Create Railway Project
+1. Sign up at [Railway](https://railway.app)
+2. Create a new project and connect to your GitHub repository
+3. Add a new service for the backend
+
+#### 2. Configure Environment Variables
+Add the environment variables listed in the Configuration section.
+
+#### 3. Deploy Backend Service
+```bash
+# The deployment happens automatically via Railway after configuration
+```
+
+#### 4. Run Database Migrations
+After the first deployment, run:
+```bash
+railway run alembic upgrade head
+```
+
+#### 5. Initialize RAG System
+After deployment and migrations, reindex the documentation:
+```bash
+railway run python manage.py reindex
+```
+
+### Method 2: Docker Compose (Alternative)
 
 #### 1. Build and Start Services
 ```bash
@@ -86,7 +113,13 @@ docker-compose exec backend alembic upgrade head
 docker-compose exec backend python init_db.py
 ```
 
-### Method 2: Manual Deployment
+#### 4. Initialize RAG System
+After initial setup, reindex the documentation:
+```bash
+docker-compose exec backend python manage.py reindex
+```
+
+### Method 3: Manual Deployment
 
 #### Backend Deployment
 1. Set up Python virtual environment:
@@ -105,7 +138,12 @@ pip install -r requirements.txt
 alembic upgrade head
 ```
 
-4. Start the application:
+4. Initialize RAG system by reindexing documentation:
+```bash
+python manage.py reindex
+```
+
+5. Start the application:
 ```bash
 uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 ```
@@ -127,17 +165,31 @@ npm run deploy
 The application uses PostgreSQL for storing user data, chapters, and other structured information. Ensure your PostgreSQL instance is properly configured with adequate storage and backup strategies.
 
 ### Qdrant Configuration
-The RAG system uses Qdrant for vector storage. Ensure your Qdrant instance has sufficient memory and storage for embedding vectors. The default configuration uses a 1536-dimensional vector space for OpenAI embeddings.
+The RAG system uses Qdrant for vector storage. Ensure your Qdrant instance has sufficient memory and storage for embedding vectors. The system now uses Cohere embeddings which have a 1024-dimensional vector space. Configure your Qdrant collection accordingly.
+
+For Cohere embeddings:
+- Vector size: 1024
+- Distance metric: Cosine
+- Collection name: physical_ai_docs (default)
+
+### Cohere API Configuration
+The system uses Cohere's embedding models instead of OpenAI. Ensure your Cohere API key has sufficient quota for embedding operations. The system uses the `embed-english-v3.0` model by default.
 
 ### Environment Variables
 Key environment variables for production deployment:
 
 - `DATABASE_URL`: PostgreSQL connection string
+- `NEON_DATABASE_URL`: Neon Postgres connection string (for PHR and metadata)
 - `QDRANT_URL`: Qdrant instance URL
-- `OPENAI_API_KEY`: OpenAI API key for embeddings and completions
+- `QDRANT_API_KEY`: Qdrant API key
+- `COHERE_API_KEY`: Cohere API key for embeddings (replaces OpenAI)
+- `CCR_QWEN_TOKEN`: CCR Qwen token for response generation
 - `SECRET_KEY`: JWT secret key (should be a long, random string)
 - `ACCESS_TOKEN_EXPIRE_MINUTES`: Token expiration time
 - `ENVIRONMENT`: Set to "production" to enable production optimizations
+- `RAG_DEFAULT_TOPK`: Default number of results to retrieve (default: 5)
+- `CHUNK_SIZE`: Size of text chunks for embedding (default: 512)
+- `MAX_TOKENS`: Maximum tokens for response generation (default: 2048)
 
 ## Monitoring and Maintenance
 
@@ -183,10 +235,22 @@ Monitor these key metrics:
 - Clear npm cache: `npm cache clean --force`
 - Delete node_modules and reinstall: `rm -rf node_modules && npm install`
 
-#### 4. OpenAI API Issues
-- Verify API key is valid and has sufficient quota
-- Check OpenAI service status
-- Verify network connectivity to OpenAI endpoints
+#### 4. Cohere API Issues
+- Verify COHERE_API_KEY is valid and has sufficient quota
+- Check Cohere service status
+- Verify network connectivity to Cohere endpoints
+- Ensure using the correct embedding model (embed-english-v3.0)
+
+#### 5. Qdrant Vector Database Issues
+- Verify QDRANT_URL and QDRANT_API_KEY are correctly set
+- Check that the collection exists and is properly configured for 1024-dim vectors
+- Verify sufficient storage space for embeddings
+- Check that the vector dimension matches Cohere's output (1024)
+
+#### 6. RAG System Issues
+- Ensure documentation has been properly indexed using `python manage.py reindex`
+- Check that the RAG endpoints are accessible and properly configured
+- Verify that chunking is working correctly for long documents
 
 ### Debugging Production Issues
 1. Check application logs in the `logs/` directory

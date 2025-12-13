@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, File, UploadFile
+from fastapi import APIRouter, HTTPException, Depends, File, UploadFile, Request
 from datetime import datetime, timedelta
 import os
 from slowapi import Limiter
@@ -7,7 +7,6 @@ from slowapi.util import get_remote_address
 from ...database.session import get_db
 from ...models.user import User
 from ...models.user_preferences import UserPreferences
-from ...services.formatting import formatting_service
 from ...models.api_responses import (
     UserPreferencesRequest,
     UserPreferencesResponseModel as UserPreferencesResponse
@@ -20,7 +19,7 @@ router = APIRouter()
 
 @router.get("/user/preferences", response_model=UserPreferencesResponse)
 @limiter.limit("20/minute")
-async def get_user_preferences(db=Depends(get_db)):
+async def get_user_preferences(request: Request, db=Depends(get_db)):
     """
     Retrieve the current user's preferences for textbook generation.
     """
@@ -59,7 +58,7 @@ async def get_user_preferences(db=Depends(get_db)):
 
 @router.put("/user/preferences", response_model=UserPreferencesResponse)
 @limiter.limit("10/minute")
-async def update_user_preferences(request: UserPreferencesRequest, db=Depends(get_db)):
+async def update_user_preferences(request: Request, update_request: UserPreferencesRequest, db=Depends(get_db)):
     """
     Update the current user's preferences for textbook generation.
     """

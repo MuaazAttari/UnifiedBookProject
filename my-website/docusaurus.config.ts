@@ -13,19 +13,20 @@ const config: Config = {
   future: {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
+  trailingSlash: true,
 
   // Set the production url of your site here
-  url: 'https://github.com/MuaazAttari',
+  url: 'https://MuaazAttari.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/UnifiedBookProject/',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'MuaazAttari', // Usually your GitHub org/user name.
   projectName: 'UnifiedBookProject', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you

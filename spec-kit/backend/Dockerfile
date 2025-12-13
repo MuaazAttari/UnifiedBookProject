@@ -24,5 +24,5 @@ COPY . /app/
 # Expose port
 EXPOSE 8000
 
-# Run the application
-CMD ["gunicorn", "--worker-class", "uvicorn.workers.UvicornWorker", "--workers", "4", "--bind", "0.0.0.0:8000", "src.api.main:app"]
+# Run the application with uvicorn for Railway compatibility
+CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "${PORT:-8000}"]

@@ -12,6 +12,3 @@ convention = {
 
 metadata = MetaData(naming_convention=convention)
 Base = declarative_base(metadata=metadata)
-
-# Import all models to ensure they are registered with the Base
-from . import models  # This will import all models

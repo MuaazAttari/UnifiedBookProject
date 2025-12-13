@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from datetime import datetime
 from sqlalchemy import func
 from slowapi import Limiter
@@ -17,7 +17,7 @@ router = APIRouter()
 
 @router.put("/chapter/{chapter_id}", response_model=UpdateChapterResponse)
 @limiter.limit("10/minute")
-async def update_chapter(chapter_id: str, request: UpdateChapterRequest, db=Depends(get_db)):
+async def update_chapter(request: Request, chapter_id: str, update_request: UpdateChapterRequest, db=Depends(get_db)):
     """
     Update the content of a specific chapter after review.
     """
@@ -89,7 +89,7 @@ async def update_chapter(chapter_id: str, request: UpdateChapterRequest, db=Depe
 
 @router.put("/section/{section_id}")
 @limiter.limit("15/minute")
-async def update_section(section_id: str, title: str = None, content: str = None, type: str = None, db=Depends(get_db)):
+async def update_section(request: Request, section_id: str, title: str = None, content: str = None, type: str = None, db=Depends(get_db)):
     """
     Update the content of a specific section after review.
     """
@@ -145,7 +145,7 @@ async def update_section(section_id: str, title: str = None, content: str = None
 
 @router.post("/chapter/{chapter_id}/section")
 @limiter.limit("10/minute")
-async def add_section(chapter_id: str, title: str, content: str, type: str = "CONTENT", position: int = None, db=Depends(get_db)):
+async def add_section(request: Request, chapter_id: str, title: str, content: str, type: str = "CONTENT", position: int = None, db=Depends(get_db)):
     """
     Add a new section to a chapter.
     """
@@ -214,7 +214,7 @@ async def add_section(chapter_id: str, title: str, content: str, type: str = "CO
 
 @router.delete("/section/{section_id}")
 @limiter.limit("10/minute")
-async def delete_section(section_id: str, db=Depends(get_db)):
+async def delete_section(request: Request, section_id: str, db=Depends(get_db)):
     """
     Delete a section from a chapter.
     """
@@ -236,7 +236,7 @@ async def delete_section(section_id: str, db=Depends(get_db)):
 
 @router.post("/improve-content/{content_id}")
 @limiter.limit("5/minute")
-async def improve_content(content_id: str, content_type: str, feedback: str, educational_level: str, db=Depends(get_db)):
+async def improve_content(request: Request, content_id: str, content_type: str, feedback: str, educational_level: str, db=Depends(get_db)):
     """
     Improve content based on user feedback using AI.
     """

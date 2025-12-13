@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     log_file_max_size: int = 10 * 1024 * 1024  # 10MB
     log_file_backup_count: int = 5
 
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @property
     def is_local(self) -> bool:
@@ -39,7 +39,11 @@ class Settings(BaseSettings):
 
     @property
     def is_production(self) -> bool:
-        return self.environment.lower() == "production"
+        return self.environment.lower() in ["production", "railway"]
+
+    @property
+    def is_railway(self) -> bool:
+        return self.environment.lower() == "railway"
 
 
 settings = Settings()

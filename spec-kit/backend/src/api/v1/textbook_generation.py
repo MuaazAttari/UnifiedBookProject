@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from typing import Optional
 from datetime import datetime
 import uuid
@@ -124,7 +124,7 @@ async def create_textbook(request: TextbookGenerationRequest, background_tasks: 
 
 @router.get("/textbook/{textbook_id}", response_model=TextbookResponse)
 @limiter.limit("20/minute")
-async def get_textbook(textbook_id: str, db=Depends(get_db)):
+async def get_textbook(request: Request, textbook_id: str, db=Depends(get_db)):
     """
     Retrieve the current status and details of a textbook generation process.
     """
@@ -188,7 +188,7 @@ async def get_textbook(textbook_id: str, db=Depends(get_db)):
 
 @router.post("/textbook/{textbook_id}/export")
 @limiter.limit("10/minute")
-async def export_textbook(textbook_id: str, format: str = "pdf", include_solutions: bool = False, db=Depends(get_db)):
+async def export_textbook(request: Request, textbook_id: str, format: str = "pdf", include_solutions: bool = False, db=Depends(get_db)):
     """
     Export the textbook in the specified format.
     """

@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
 
-from .user import Base
+from ..database.base import Base
 
 class UserPreferences(Base):
     __tablename__ = "user_preferences"

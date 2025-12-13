@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(export GIT_USER=\"MuaazAttari\")",
+      "Bash(npm run deploy)",
+      "Bash(git push origin master)"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "uvicorn src.api.main:app --host 0.0.0.0 --port $PORT"
+  },
+  "env": {
+    "ENVIRONMENT": {
+      "value": "production",
+      "description": "Environment type",
+      "required": true
+    },
+    "DATABASE_URL": {
+      "value": "",
+      "description": "Database URL for the application",
+      "required": true
+    },
+    "SECRET_KEY": {
+      "value": "",
+      "description": "Secret key for JWT tokens",
+      "required": true
+    },
+    "COHERE_API_KEY": {
+      "value": "",
+      "description": "Cohere API key for embeddings",
+      "required": true
+    },
+    "QDRANT_URL": {
+      "value": "",
+      "description": "Qdrant vector database URL",
+      "required": true
+    },
+    "QDRANT_API_KEY": {
+      "value": "",
+      "description": "Qdrant API key",
+      "required": true
+    },
+    "CCR_QWEN_TOKEN": {
+      "value": "",
+      "description": "CCR Qwen token for AI responses",
+      "required": true
+    }
+  }
+}
